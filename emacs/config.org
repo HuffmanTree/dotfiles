@@ -1,0 +1,237 @@
+* Emacs config
+
+** Basic
+
+Some very basic settings that tweak the UI.
+
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (fringe-mode 0)
+  (setq inhibit-startup-screen t)
+#+END_SRC
+
+** Package Manager
+
+Load ~use-package~ and initialize it.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
+  			   ("melpa" . "https://melpa.org/packages/")))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+  (require 'use-package)
+#+END_SRC
+
+** Documentation
+
+We use ~helpful~ to provide rich documentations.
+
+| Key sequence | Function           | Description                                                     |
+|--------------+--------------------+-----------------------------------------------------------------|
+| ~C-h v~      | ~helpful-variable~ | Show documentation of a variable                                |
+| ~C-h f~      | ~helpful-function~ | Show documentation of a function                                |
+| ~C-h k~      | ~helpful-key~      | Show documentation of a function associated with a key sequence |
+
+#+BEGIN_SRC emacs-lisp
+  (setq eldoc-echo-area-prefer-doc-buffer t)
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h v" . helpful-variable)
+    ("C-h f" . helpful-function)
+    ("C-h k" . helpful-key))
+#+END_SRC
+
+** Shell
+
+Emacs comes with a shell emulator ~eshell~.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+#+END_SRC
+
+** Key Completion
+
+Package ~which-key~ display key sequence completion of an already typed prefix.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode)
+    :custom
+    (which-key-popup-type 'minibuffer))
+#+END_SRC
+
+** Theme & Fonts
+
+Custom theme and fonts. Note that fonts must be installed at the system level before Emacs can use them.
+
+#+BEGIN_SRC sh
+  apt install fonts-dejavu
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'wombat)
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono-8")
+  (use-package all-the-icons
+    :ensure t
+    :if (display-graphic-p)
+    :init
+    (unless (member "all-the-icons" (font-family-list))
+      (all-the-icons-install-fonts t)))
+#+END_SRC
+
+** Code Versioning
+
+Magit is an Git client embedded in Emacs. It requires ~git~ installed.
+
+#+BEGIN_SRC sh
+  apt install git
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    (("C-x g" . magit-status)))
+#+END_SRC
+
+| Key sequence | Function | Description    |
+|--------------+----------+----------------|
+| ~C-x g~      | ~magit~  | Invoke ~magit~ |
+
+** Completion in buffer
+
+The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode)
+    :custom
+    (vertico-cycle t))
+
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :init
+    (marginalia-mode))
+
+  (use-package all-the-icons-completion
+    :after (marginalia all-the-icons)
+    :ensure t
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+    :init (all-the-icons-completion-mode))
+
+  (use-package consult
+    :ensure t
+    :init
+    (setq xref-show-xrefs-function #'consult-xref
+	  xref-show-definitions-function #'consult-xref)
+    :custom
+    (consult-async-min-input 1)
+    :bind
+    ("C-s"     . consult-line)
+    ("C-x b"   . consult-buffer)
+    ("M-g g"   . consult-goto-line)
+    ("M-g M-g" . consult-goto-line)
+    ("C-x p b" . consult-project-buffer))
+#+END_SRC
+
+** IDE
+
+Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package corfu
+    :ensure t
+    :init
+    (global-corfu-mode)
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t))
+
+  (use-package eslint-rc
+    :ensure t
+    :custom
+    (eslint-rc-use-eslintignore nil)
+    :hook
+    ((js2-mode . eslint-rc-mode) (typescript-mode . eslint-rc-mode)))
+
+  (use-package eglot
+    :ensure t)
+
+  (use-package js2-mode
+    :mode "\\.js\\'"
+    :ensure t
+    :custom
+    (js-indent-level 2)
+    :hook
+    (js2-mode . eglot-ensure))
+
+  (use-package json-mode
+    :mode "\\.json\\'"
+    :ensure t
+    :custom
+    (js-indent-level 2)
+    :hook
+    (json-mode . eglot-ensure))
+
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :ensure t
+    :custom
+    (typescript-indent-level 2)
+    :hook
+    (typescript-mode . eglot-ensure))
+
+  (use-package markdown-mode
+    :mode "\\.md\\'"
+    :ensure t
+    :hook
+    (markdown-mode . eglot-ensure))
+
+  (use-package tex-mode
+    :mode "\\.tex"
+    :hook
+    (tex-mode . eglot-ensure))
+
+  (use-package python-mode
+    :mode "\\.py"
+    :hook
+    (python-mode . eglot-ensure))
+
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    :hook
+    (tree-sitter-after-on . tree-sitter-hl-mode))
+
+  (use-package tree-sitter-langs
+    :ensure t
+    :after tree-sitter)
+#+END_SRC
+
+*** LSP servers
+
+| Language                | Server                             |
+|-------------------------+------------------------------------|
+| javascript - typescript | [[https://github.com/typescript-language-server/typescript-language-server][typescript-laguage-server]]          |
+| markdown-mode           | [[https://github.com/artempyanykh/marksman][marksman]]                           |
+| latex                   | [[https://github.com/astoff/digestif][digestif]]                           |
+| python                  | [[https://github.com/RobertCraigie/pyright-python][pyright-python]]                     |
+| eslint                  | [[https://github.com/Quramy/typescript-eslint-language-service][typescript-eslint-language-service]] |
