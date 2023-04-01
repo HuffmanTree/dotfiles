@@ -156,6 +156,8 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~.
 Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
 
 #+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+
   (use-package corfu
     :ensure t
     :init
