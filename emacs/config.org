@@ -158,6 +158,20 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
 
+  (use-package eglot
+    :ensure t)
+
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    :hook
+    (tree-sitter-after-on . tree-sitter-hl-mode))
+
+  (use-package tree-sitter-langs
+    :ensure t
+    :after tree-sitter)
+
   (use-package corfu
     :ensure t
     :init
@@ -172,9 +186,6 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (eslint-rc-use-eslintignore nil)
     :hook
     ((js2-mode . eslint-rc-mode) (typescript-mode . eslint-rc-mode)))
-
-  (use-package eglot
-    :ensure t)
 
   (use-package js2-mode
     :mode "\\.js\\'"
@@ -215,17 +226,6 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode "\\.py"
     :hook
     (python-mode . eglot-ensure))
-
-  (use-package tree-sitter
-    :ensure t
-    :config
-    (global-tree-sitter-mode)
-    :hook
-    (tree-sitter-after-on . tree-sitter-hl-mode))
-
-  (use-package tree-sitter-langs
-    :ensure t
-    :after tree-sitter)
 #+END_SRC
 
 *** LSP servers
