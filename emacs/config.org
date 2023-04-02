@@ -161,16 +161,16 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
   (use-package eglot
     :ensure t)
 
+  (use-package tree-sitter-langs
+    :ensure t)
+
   (use-package tree-sitter
     :ensure t
+    :after tree-sitter-langs
     :config
     (global-tree-sitter-mode)
     :hook
     (tree-sitter-after-on . tree-sitter-hl-mode))
-
-  (use-package tree-sitter-langs
-    :ensure t
-    :after tree-sitter)
 
   (use-package corfu
     :ensure t
