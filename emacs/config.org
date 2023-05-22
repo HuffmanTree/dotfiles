@@ -230,6 +230,12 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
   (use-package dotenv-mode
     :ensure t
     :mode "\\.env\\..*\\'")
+
+  (use-package yaml-mode
+    :ensure t
+    :mode "\\.ya?ml\\'"
+    :hook
+    (yaml-mode . eglot-ensure))
 #+END_SRC
 
 *** LSP servers
@@ -241,3 +247,4 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 | latex                   | [[https://github.com/astoff/digestif][digestif]]                           |
 | python                  | [[https://github.com/RobertCraigie/pyright-python][pyright-python]]                     |
 | eslint                  | [[https://github.com/Quramy/typescript-eslint-language-service][typescript-eslint-language-service]] |
+| yaml                    | [[https://github.com/redhat-developer/yaml-language-server][yaml-language-server]]               |
