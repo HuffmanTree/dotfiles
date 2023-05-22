@@ -226,6 +226,10 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode "\\.py"
     :hook
     (python-mode . eglot-ensure))
+
+  (use-package dotenv-mode
+    :ensure t
+    :mode "\\.env\\..*\\'")
 #+END_SRC
 
 *** LSP servers
