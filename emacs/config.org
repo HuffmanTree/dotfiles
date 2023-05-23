@@ -236,6 +236,10 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode "\\.ya?ml\\'"
     :hook
     (yaml-mode . eglot-ensure))
+
+  (use-package vue-mode
+    :mode "\\.vue"
+    :ensure t)
 #+END_SRC
 
 *** LSP servers
