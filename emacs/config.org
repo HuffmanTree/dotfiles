@@ -29,6 +29,17 @@ Load ~use-package~ and initialize it.
   (require 'use-package)
 #+END_SRC
 
+Automatically update packages every 7 days, and delete old versions
+
+#+BEGIN_SRC emacs-lisp
+(use-package auto-package-update
+   :ensure t
+   :config
+   (setq auto-package-update-delete-old-versions t
+         auto-package-update-interval 7)
+   (auto-package-update-maybe))
+#+END_SRC
+
 ** Documentation
 
 We use ~helpful~ to provide rich documentations.
