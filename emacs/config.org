@@ -214,6 +214,23 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :hook
     (json-mode . eglot-ensure))
 
+  ;; Snippet copied from https://github.com/typescript-language-server/typescript-language-server/issues/559
+  ;; I appears to fix "\u0000 is not allowed without JSON_ALLOW_NUL"
+
+  ;; same definition as mentioned earlier
+  (advice-add 'json-parse-string :around
+              (lambda (orig string &rest rest)
+                (apply orig (s-replace "\\u0000" "" string)
+                       rest)))
+
+  ;; minor changes: saves excursion and uses search-forward instead of re-search-forward
+  (advice-add 'json-parse-buffer :around
+              (lambda (oldfn &rest args)
+                (save-excursion
+                  (while (search-forward "\\u0000" nil t)
+                    (replace-match "" nil t)))
+                (apply oldfn args)))
+
   (use-package typescript-mode
     :mode "\\.ts\\'"
     :ensure t
