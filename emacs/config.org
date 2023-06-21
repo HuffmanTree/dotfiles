@@ -125,7 +125,7 @@ Magit is an Git client embedded in Emacs. It requires ~git~ installed.
 
 ** Completion in buffer
 
-The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~.
+The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. In addition, ~orderless~ makes the completion matching more fluid.
 
 #+BEGIN_SRC emacs-lisp
   (use-package vertico
@@ -151,7 +151,7 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~.
     :ensure t
     :init
     (setq xref-show-xrefs-function #'consult-xref
-	  xref-show-definitions-function #'consult-xref)
+          xref-show-definitions-function #'consult-xref)
     :custom
     (consult-async-min-input 1)
     :bind
@@ -160,6 +160,12 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~.
     ("M-g g"   . consult-goto-line)
     ("M-g M-g" . consult-goto-line)
     ("C-x p b" . consult-project-buffer))
+
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 
 ** IDE
