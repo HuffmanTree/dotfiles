@@ -271,9 +271,33 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :hook
     (yaml-mode . eglot-ensure))
 
+  ;; Snippet copied from https://www.reddit.com/r/emacs/comments/11svcvj/emacs_setup_for_vue_typescript_volar_eglot_webmode
+  ;; Setup Eglot + Vue Language Server + Typescript
+  (define-derived-mode vue-mode web-mode "Vue")
   (use-package vue-mode
     :mode "\\.vue"
-    :ensure t)
+    :hook
+    (vue-mode . eglot-ensure))
+
+  (defun vue-eglot-init-options ()
+    (let ((tsdk-path (expand-file-name
+                      "lib"
+                      (shell-command-to-string "npm list --global --parseable typescript | head -n1 | tr -d \"\n\""))))
+      `(:typescript (:tsdk ,tsdk-path
+                           :languageFeatures (:completion
+                                              (:defaultTagNameCase "both"
+                                                                   :defaultAttrNameCase "kebabCase"
+                                                                   :getDocumentNameCasesRequest nil
+                                                                   :getDocumentSelectionRequest nil)
+                                              :diagnostics
+                                              (:getDocumentVersionRequest nil))
+                           :documentFeatures (:documentFormatting
+                                              (:defaultPrintWidth 100
+                                                                  :getDocumentPrintWidthRequest nil)
+                                              :documentSymbol t
+                                              :documentColor t)))))
+  (add-to-list 'eglot-server-programs
+               `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
 #+END_SRC
 
 *** LSP servers
@@ -286,3 +310,4 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 | python                  | [[https://github.com/RobertCraigie/pyright-python][pyright-python]]                     |
 | eslint                  | [[https://github.com/Quramy/typescript-eslint-language-service][typescript-eslint-language-service]] |
 | yaml                    | [[https://github.com/redhat-developer/yaml-language-server][yaml-language-server]]               |
+| vue                     | [[https://github.com/vuejs/language-tools][vue-language-server]]                |
