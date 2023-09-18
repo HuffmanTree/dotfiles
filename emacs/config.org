@@ -271,6 +271,12 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :hook
     (yaml-mode . eglot-ensure))
 
+  (use-package rust-mode
+    :ensure t
+    :mode "\\.rs"
+    :hook
+    (rust-mode . eglot-ensure))
+
   ;; Snippet copied from https://www.reddit.com/r/emacs/comments/11svcvj/emacs_setup_for_vue_typescript_volar_eglot_webmode
   ;; Setup Eglot + Vue Language Server + Typescript
   (define-derived-mode vue-mode web-mode "Vue")
@@ -311,3 +317,4 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 | eslint                  | [[https://github.com/Quramy/typescript-eslint-language-service][typescript-eslint-language-service]] |
 | yaml                    | [[https://github.com/redhat-developer/yaml-language-server][yaml-language-server]]               |
 | vue                     | [[https://github.com/vuejs/language-tools][vue-language-server]]                |
+| rust                    | [[https://github.com/rust-lang/rust-analyzer][rust-analyzer]]                      |
