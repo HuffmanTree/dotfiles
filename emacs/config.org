@@ -5,44 +5,41 @@
 Some very basic settings that tweak the UI.
 
 #+BEGIN_SRC emacs-lisp
-  (column-number-mode)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (fringe-mode 0)
-  (setq inhibit-startup-screen t)
+  (column-number-mode)            ;; column number display in the mode line
+  (menu-bar-mode -1)              ;; no menu bar
+  (scroll-bar-mode -1)            ;; no scroll bar
+  (tool-bar-mode -1)              ;; no tool bar
+  (setq inhibit-startup-screen t) ;; no startup screen
+  (fringe-mode 4)                 ;; 4px padding on each frame
 #+END_SRC
 
 ** Package Manager
 
-Load ~use-package~ and initialize it.
+Native ~use-package~ is used as package manager.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
   (setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
-  			   ("melpa" . "https://melpa.org/packages/")))
+			   ("melpa" . "https://melpa.org/packages/")))
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-  (require 'use-package)
 #+END_SRC
 
-Automatically update packages every 7 days, and delete old versions
+Automatically update packages every 7 days, and delete old versions.
 
 #+BEGIN_SRC emacs-lisp
-(use-package auto-package-update
-   :ensure t
-   :config
-   (setq auto-package-update-delete-old-versions t
-         auto-package-update-interval 7)
-   (auto-package-update-maybe))
+  (use-package auto-package-update
+    :ensure t
+    :custom
+    (auto-package-update-interval 7)            ;; period between updates is 7 days
+    (auto-package-update-delete-old-versions t) ;; old versions of updated packages are removed
+    :config
+    (auto-package-update-maybe))                ;; updates are automatically made according to the interval
 #+END_SRC
 
 ** Documentation
 
-We use ~helpful~ to provide rich documentations.
+Default ~*Help*~ buffer is quite poor and gets enriched using ~helpful~.
 
 | Key sequence | Function           | Description                                                     |
 |--------------+--------------------+-----------------------------------------------------------------|
@@ -51,12 +48,14 @@ We use ~helpful~ to provide rich documentations.
 | ~C-h k~      | ~helpful-key~      | Show documentation of a function associated with a key sequence |
 
 #+BEGIN_SRC emacs-lisp
-  (setq eldoc-echo-area-prefer-doc-buffer t)
+  (setq eldoc-echo-area-prefer-doc-buffer t) ;; documentation is displayed in ElDoc buffer, if available
+
   (use-package helpful
     :ensure t
     :bind
     ("C-h v" . helpful-variable)
     ("C-h f" . helpful-function)
+    ("C-h s" . helpful-symbol)
     ("C-h k" . helpful-key))
 #+END_SRC
 
@@ -74,7 +73,7 @@ Emacs comes with a shell emulator ~eshell~.
 
 ** Key Completion
 
-Package ~which-key~ display key sequence completion of an already typed prefix.
+Package ~which-key~ displays key sequence completion of an already typed prefix.
 
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
@@ -94,8 +93,12 @@ Custom theme and fonts. Note that fonts must be installed at the system level be
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'wombat)
+  (use-package modus-themes
+    :ensure t
+    :config (modus-themes-select 'modus-operandi-tinted))
+
   (set-face-attribute 'default nil :font "DejaVu Sans Mono-8")
+
   (use-package all-the-icons
     :ensure t
     :if (display-graphic-p)
@@ -103,6 +106,19 @@ Custom theme and fonts. Note that fonts must be installed at the system level be
     (unless (member "all-the-icons" (font-family-list))
       (all-the-icons-install-fonts t)))
 #+END_SRC
+
+** File Manager
+
+Enhancements of the inbuilt Dired.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons-dired
+    :ensure t
+    :after all-the-icons
+    :hook (dired-mode . all-the-icons-dired-mode)
+    :custom (all-the-icons-dired-monochrome nil))
+#+END_SRC
+
 
 ** Code Versioning
 
@@ -116,16 +132,17 @@ Magit is an Git client embedded in Emacs. It requires ~git~ installed.
   (use-package magit
     :ensure t
     :bind
-    (("C-x g" . magit-status)))
+    ("C-x g" . magit-status))
 #+END_SRC
 
 | Key sequence | Function | Description    |
 |--------------+----------+----------------|
 | ~C-x g~      | ~magit~  | Invoke ~magit~ |
 
+
 ** Completion in buffer
 
-The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. In addition, ~orderless~ makes the completion matching more fluid.
+The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. In addition, ~orderless~ makes the completion much matching more fluid.
 
 #+BEGIN_SRC emacs-lisp
   (use-package vertico
@@ -149,11 +166,10 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
 
   (use-package consult
     :ensure t
-    :init
-    (setq xref-show-xrefs-function #'consult-xref
-          xref-show-definitions-function #'consult-xref)
     :custom
     (consult-async-min-input 1)
+    (xref-show-xrefs-function #'consult-xref)
+    (xref-show-definitions-function #'consult-xref)
     :bind
     ("C-s"     . consult-line)
     ("C-x b"   . consult-buffer)
@@ -170,24 +186,20 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
 
 ** IDE
 
-Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
+Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot + Tree-Sitter, that are now both builtin in Emacs 29, along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
 
 #+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-
   (use-package eglot
-    :ensure t)
+    :custom
+    (indent-tabs-mode nil))
 
-  (use-package tree-sitter-langs
-    :ensure t)
-
-  (use-package tree-sitter
+  (use-package treesit-auto
     :ensure t
-    :after tree-sitter-langs
+    :demand t
+    :custom
+    (treesit-auto-install t)
     :config
-    (global-tree-sitter-mode)
-    :hook
-    (tree-sitter-after-on . tree-sitter-hl-mode))
+    (global-treesit-auto-mode))
 
   (use-package corfu
     :ensure t
@@ -196,125 +208,79 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :custom
     (corfu-cycle t)
     (corfu-auto t))
+#+END_SRC
 
+*** Rust
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-ts-mode
+    :mode "\\.rs"
+    :hook
+    (rust-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Typescript
+
+#+BEGIN_SRC emacs-lisp
+  (use-package typescript-ts-mode
+    :mode "\\.ts"
+    :hook
+    (typescript-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Javascript
+
+#+BEGIN_SRC emacs-lisp
+  (use-package js-mode
+    :mode "\\.js"
+    :hook
+    (js-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** ESLint support
+
+#+BEGIN_SRC emacs-lisp
   (use-package eslint-rc
     :ensure t
     :custom
     (eslint-rc-use-eslintignore nil)
     :hook
-    ((js2-mode . eslint-rc-mode) (typescript-mode . eslint-rc-mode)))
-
-  (use-package js2-mode
-    :mode "\\.js\\'"
-    :ensure t
-    :custom
-    (js-indent-level 2)
-    :hook
-    (js2-mode . eglot-ensure))
-
-  (use-package json-mode
-    :mode "\\.json\\'"
-    :ensure t
-    :custom
-    (js-indent-level 2)
-    :hook
-    (json-mode . eglot-ensure))
-
-  ;; Snippet copied from https://github.com/typescript-language-server/typescript-language-server/issues/559
-  ;; It appears to fix "\u0000 is not allowed without JSON_ALLOW_NUL"
-
-  ;; same definition as mentioned earlier
-  (advice-add 'json-parse-string :around
-              (lambda (orig string &rest rest)
-                (apply orig (s-replace "\\u0000" "" string)
-                       rest)))
-
-  ;; minor changes: saves excursion and uses search-forward instead of re-search-forward
-  (advice-add 'json-parse-buffer :around
-              (lambda (oldfn &rest args)
-                (save-excursion
-                  (while (search-forward "\\u0000" nil t)
-                    (replace-match "" nil t)))
-                (apply oldfn args)))
-
-  (use-package typescript-mode
-    :mode "\\.ts\\'"
-    :ensure t
-    :custom
-    (typescript-indent-level 2)
-    :hook
-    (typescript-mode . eglot-ensure))
-
-  (use-package markdown-mode
-    :mode "\\.md\\'"
-    :ensure t
-    :hook
-    (markdown-mode . eglot-ensure))
-
-  (use-package tex-mode
-    :mode "\\.tex"
-    :hook
-    (tex-mode . eglot-ensure))
-
-  (use-package python-mode
-    :mode "\\.py"
-    :hook
-    (python-mode . eglot-ensure))
-
-  (use-package dotenv-mode
-    :ensure t
-    :mode "\\.env\\..*\\'")
-
-  (use-package yaml-mode
-    :ensure t
-    :mode "\\.ya?ml\\'"
-    :hook
-    (yaml-mode . eglot-ensure))
-
-  (use-package rust-mode
-    :ensure t
-    :mode "\\.rs"
-    :hook
-    (rust-mode . eglot-ensure))
-
-  ;; Snippet copied from https://www.reddit.com/r/emacs/comments/11svcvj/emacs_setup_for_vue_typescript_volar_eglot_webmode
-  ;; Setup Eglot + Vue Language Server + Typescript
-  (define-derived-mode vue-mode web-mode "Vue")
-  (use-package vue-mode
-    :mode "\\.vue"
-    :hook
-    (vue-mode . eglot-ensure))
-
-  (defun vue-eglot-init-options ()
-    (let ((tsdk-path (expand-file-name
-                      "lib"
-                      (shell-command-to-string "npm list --global --parseable typescript | head -n1 | tr -d \"\n\""))))
-      `(:typescript (:tsdk ,tsdk-path
-                           :languageFeatures (:completion
-                                              (:defaultTagNameCase "both"
-                                                                   :defaultAttrNameCase "kebabCase"
-                                                                   :getDocumentNameCasesRequest nil
-                                                                   :getDocumentSelectionRequest nil)
-                                              :diagnostics
-                                              (:getDocumentVersionRequest nil))
-                           :documentFeatures (:documentFormatting
-                                              (:defaultPrintWidth 100
-                                                                  :getDocumentPrintWidthRequest nil)
-                                              :documentSymbol t
-                                              :documentColor t)))))
-  (add-to-list 'eglot-server-programs
-               `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
+    ((js-ts-mode . eslint-rc-mode) (typescript-ts-mode . eslint-rc-mode)))
 #+END_SRC
 
-*** LSP servers
+*** JSON
 
-| Language                | Server                             |
-|-------------------------+------------------------------------|
-| javascript - typescript | [[https://github.com/typescript-language-server/typescript-language-server][typescript-laguage-server]]          |
-| markdown-mode           | [[https://github.com/artempyanykh/marksman][marksman]]                           |
-| latex                   | [[https://github.com/astoff/digestif][digestif]]                           |
-| python                  | [[https://github.com/RobertCraigie/pyright-python][pyright-python]]                     |
-| eslint                  | [[https://github.com/Quramy/typescript-eslint-language-service][typescript-eslint-language-service]] |
-| yaml                    | [[https://github.com/redhat-developer/yaml-language-server][yaml-language-server]]               |
-| vue                     | [[https://github.com/vuejs/language-tools][vue-language-server]]                |
-| rust                    | [[https://github.com/rust-lang/rust-analyzer][rust-analyzer]]                      |
+#+BEGIN_SRC emacs-lisp
+  (use-package json-ts-mode
+    :mode ("\\.json" "\\.eslintrc")
+    :hook
+    (json-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Markdown
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode "\\.md"
+    :hook
+    (markdown-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Java
+
+#+BEGIN_SRC emacs-lisp
+  (use-package java-ts-mode
+    :mode "\\.java"
+    :hook
+    (java-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Python
+
+#+BEGIN_SRC emacs-lisp
+  (use-package python-ts-mode
+    :mode "\\.py"
+    :hook
+    (python-ts-mode . eglot-ensure))
+#+END_SRC
