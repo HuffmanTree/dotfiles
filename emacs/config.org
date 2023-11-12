@@ -30,7 +30,7 @@ Automatically update packages every 7 days, and delete old versions.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-package-update
     :ensure t
-    :custom
+    :custom 
     (auto-package-update-interval 7)            ;; period between updates is 7 days
     (auto-package-update-delete-old-versions t) ;; old versions of updated packages are removed
     :config
@@ -255,6 +255,15 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode ("\\.json" "\\.eslintrc")
     :hook
     (json-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** YAML
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-ts-mode
+    :mode ("\\.yaml" "\\.yml")
+    :hook
+    (yaml-ts-mode . eglot-ensure))
 #+END_SRC
 
 *** Markdown
