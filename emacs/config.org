@@ -293,3 +293,21 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :hook
     (python-ts-mode . eglot-ensure))
 #+END_SRC
+
+*** C
+
+#+BEGIN_SRC emacs-lisp
+  (use-package c-ts-mode
+    :mode ("\\.c" "\\.h")
+    :hook
+    (c-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** C++
+
+#+BEGIN_SRC emacs-lisp
+  (use-package c++-ts-mode
+    :mode ("\\.cpp" "\\.hpp")
+    :hook
+    (c++-ts-mode . eglot-ensure))
+#+END_SRC
