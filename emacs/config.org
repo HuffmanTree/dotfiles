@@ -107,6 +107,11 @@ Custom theme and fonts. Note that fonts must be installed at the system level be
       (all-the-icons-install-fonts t)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (use-package ansi-color
+    :hook (compilation-filter . ansi-color-compilation-filter))
+#+END_SRC
+
 ** File Manager
 
 Enhancements of the inbuilt Dired.
