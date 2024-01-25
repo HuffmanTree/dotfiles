@@ -119,7 +119,6 @@ Enhancements of the inbuilt Dired.
     :custom (all-the-icons-dired-monochrome nil))
 #+END_SRC
 
-
 ** Code Versioning
 
 Magit is an Git client embedded in Emacs. It requires ~git~ installed.
@@ -298,7 +297,7 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 
 #+BEGIN_SRC emacs-lisp
   (use-package c-ts-mode
-    :mode ("\\.c" "\\.h")
+    :mode ("\\.c$" "\\.h$")
     :hook
     (c-ts-mode . eglot-ensure))
 #+END_SRC
@@ -307,7 +306,7 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 
 #+BEGIN_SRC emacs-lisp
   (use-package c++-ts-mode
-    :mode ("\\.cpp" "\\.hpp")
+    :mode ("\\.cpp$" "\\.hpp$")
     :hook
     (c++-ts-mode . eglot-ensure))
 #+END_SRC
