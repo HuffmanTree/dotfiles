@@ -124,6 +124,16 @@ Enhancements of the inbuilt Dired.
     :custom (all-the-icons-dired-monochrome nil))
 #+END_SRC
 
+** Container Manager
+
+Docker integration in Emacs to manage containers and images !!
+
+#+BEGIN_SRC emacs-lisp
+  (use-package docker
+    :ensure t
+    :bind ("C-c d" . docker))
+#+END_SRC
+
 ** Code Versioning
 
 Magit is an Git client embedded in Emacs. It requires ~git~ installed.
@@ -142,7 +152,6 @@ Magit is an Git client embedded in Emacs. It requires ~git~ installed.
 | Key sequence | Function | Description    |
 |--------------+----------+----------------|
 | ~C-x g~      | ~magit~  | Invoke ~magit~ |
-
 
 ** Completion in buffer
 
