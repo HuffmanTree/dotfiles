@@ -156,6 +156,12 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     :custom
     (vertico-cycle t))
 
+  (use-package vertico-posframe
+    :ensure t
+    :after vertico
+    :init
+    (vertico-posframe-mode))
+
   (use-package marginalia
     :after vertico
     :ensure t
