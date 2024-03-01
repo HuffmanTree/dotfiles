@@ -208,6 +208,11 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
 Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot + Tree-Sitter, that are now both builtin in Emacs 29, along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (use-package eglot
     :custom
     (indent-tabs-mode nil))
