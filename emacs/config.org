@@ -92,6 +92,8 @@ Custom theme and fonts. Note that fonts must be installed at the system level be
   apt install fonts-dejavu
 #+END_SRC
 
+Load my theme and icons to make them available for other packages.
+
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
     :ensure t
@@ -106,6 +108,8 @@ Custom theme and fonts. Note that fonts must be installed at the system level be
     (unless (member "all-the-icons" (font-family-list))
       (all-the-icons-install-fonts t)))
 #+END_SRC
+
+Compilation mode in Emacs will not show colors by default.
 
 #+BEGIN_SRC emacs-lisp
   (use-package ansi-color
