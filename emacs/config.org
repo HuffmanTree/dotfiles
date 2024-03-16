@@ -208,6 +208,31 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 
+** Org Mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package visual-fill-column
+    :ensure t
+    :custom
+    (visual-fill-column-width 200)
+    (visual-fill-column-center-text t))
+
+  (use-package org-mode
+    :after visual-fill-column
+    :mode ("\\.org$")
+    :hook
+    (org-mode . visual-line-fill-column-mode)) ;; wrap lines within the document
+#+END_SRC
+
+Enable source code blocks evalutation for some languages:
+
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+        'org-babel-load-languages
+        '((emacs-lisp . t)
+          (js . t)))
+#+END_SRC
+
 ** IDE
 
 Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot + Tree-Sitter, that are now both builtin in Emacs 29, along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
