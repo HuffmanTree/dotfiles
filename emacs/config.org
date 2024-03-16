@@ -107,7 +107,24 @@ Load my theme and icons to make them available for other packages.
       (all-the-icons-install-fonts t)))
 
   (defun ht/set-faces (&optional frame)
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono-8"))
+    ;; set global faces
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono-8")
+    (set-face-attribute 'fixed-pitch nil :font "CMU Typewriter Text")
+    (set-face-attribute 'variable-pitch nil :font "CMU Sans Serif")
+    ;; override Org mode faces
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "CMU Sans Serif" :weight 'medium :height (cdr face)))
+    (set-face-attribute 'org-block nil :foreground 'unspecified :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch)))
   (add-hook 'after-make-frame-functions #'ht/set-faces)
   (ht/set-faces)
 #+END_SRC
@@ -217,11 +234,21 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     (visual-fill-column-width 200)
     (visual-fill-column-center-text t))
 
+  (defun ht/set-org-faces ()
+    "change to Org fonts"
+    (interactive)
+    (setq-local face-remapping-alist '((default (:height 1.3) variable-pitch)
+                                       (org-code (:height 1.2) org-code)
+                                       (org-table (:height 1.2) org-table)
+                                       (org-block (:height 1.2) org-block))))
+
   (use-package org-mode
     :after visual-fill-column
     :mode ("\\.org$")
     :hook
-    (org-mode . visual-line-fill-column-mode)) ;; wrap lines within the document
+    (org-mode . visual-line-fill-column-mode) ;; wrap lines within the document
+    (org-mode . org-indent-mode)
+    (org-mode . ht/set-org-faces))
 #+END_SRC
 
 Enable source code blocks evalutation for some languages:
