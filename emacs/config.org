@@ -99,14 +99,17 @@ Load my theme and icons to make them available for other packages.
     :ensure t
     :config (modus-themes-select 'modus-operandi-tinted))
 
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono-8")
-
   (use-package all-the-icons
     :ensure t
-    :if (display-graphic-p)
+    :if (or (display-graphic-p) (daemonp))
     :init
     (unless (member "all-the-icons" (font-family-list))
       (all-the-icons-install-fonts t)))
+
+  (defun ht/set-faces (&optional frame)
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono-8"))
+  (add-hook 'after-make-frame-functions #'ht/set-faces)
+  (ht/set-faces)
 #+END_SRC
 
 Compilation mode in Emacs will not show colors by default.
