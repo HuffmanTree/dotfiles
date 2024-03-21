@@ -371,8 +371,21 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
   (use-package markdown-mode
     :ensure t
     :mode "\\.md"
+    :custom-face
+    (markdown-pre-face ((t (:inherit org-block))))
+    (markdown-inline-code-face ((t (:inherit org-code))))
+    (markdown-url-face ((t (:inherit org-link))))
+    (markdown-table-face ((t (:inherit org-table))))
+    (markdown-header-face-1 ((t (:inherit org-level-1))))
+    (markdown-header-face-2 ((t (:inherit org-level-2))))
+    (markdown-header-face-3 ((t (:inherit org-level-3))))
+    (markdown-header-face-4 ((t (:inherit org-level-4))))
+    (markdown-header-face-5 ((t (:inherit org-level-5))))
+    (markdown-header-face-6 ((t (:inherit org-level-6))))
     :hook
-    (markdown-ts-mode . eglot-ensure))
+    (markdown-mode . variable-pitch-mode)          ;; use variable pitch fonts by default
+    (markdown-mode . visual-line-fill-column-mode) ;; wrap lines within the document
+    (markdown-mode . eglot-ensure))
 #+END_SRC
 
 *** Java
