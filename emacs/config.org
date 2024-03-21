@@ -37,14 +37,17 @@ Automatically update packages every 7 days, and delete old versions.
     (auto-package-update-maybe))                ;; updates are automatically made according to the interval
 #+END_SRC
 
-** Documentation
+** Help and Documentation
 
 Default ~*Help*~ buffer is quite poor and gets enriched using ~helpful~.
 
 | Key sequence | Function           | Description                                                     |
 |--------------+--------------------+-----------------------------------------------------------------|
+| ~C-h c~      | ~describe-char~    | Show description of the char at point                           |
+| ~C-h F~      | ~describe-face~    | Show description of a face                                      |
 | ~C-h v~      | ~helpful-variable~ | Show documentation of a variable                                |
 | ~C-h f~      | ~helpful-function~ | Show documentation of a function                                |
+| ~C-h s~      | ~helpful-symbol~   | Show documentation of a symbol                                  |
 | ~C-h k~      | ~helpful-key~      | Show documentation of a function associated with a key sequence |
 
 #+BEGIN_SRC emacs-lisp
@@ -53,6 +56,8 @@ Default ~*Help*~ buffer is quite poor and gets enriched using ~helpful~.
   (use-package helpful
     :ensure t
     :bind
+    ("C-h c" . describe-char)
+    ("C-h F" . describe-face)
     ("C-h v" . helpful-variable)
     ("C-h f" . helpful-function)
     ("C-h s" . helpful-symbol)
