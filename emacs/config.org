@@ -268,11 +268,6 @@ Enable source code blocks evalutation for some languages:
 Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot + Tree-Sitter, that are now both builtin in Emacs 29, along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package multiple-cursors
-    :ensure t)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
   (use-package eglot
     :custom
     (indent-tabs-mode nil)
@@ -420,4 +415,25 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode ("\\.cpp$" "\\.hpp$")
     :hook
     (c++-ts-mode . eglot-ensure))
+#+END_SRC
+
+** Miscellaneous
+
+Here are some configurations that do not fit in any particular sections.
+
+- Highlight the line at point if buffer is readonly
+
+#+BEGIN_SRC emacs-lisp
+  (defun ht/highlight-if-read-only ()
+    "Highlight the current line if buffer is read only"
+    (interactive)
+    (hl-line-mode (if buffer-read-only 1 -1)))
+  (add-hook 'read-only-mode-hook 'ht/highlight-if-read-only)
+#+END_SRC
+
+- Enable multiple cursors
+
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :ensure t)
 #+END_SRC
