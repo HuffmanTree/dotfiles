@@ -25,6 +25,16 @@ Native ~use-package~ is used as package manager.
     (package-refresh-contents))
 #+END_SRC
 
+Install packages directly from source using ~quelpa~ and its integration for ~use-package~.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package quelpa
+    :ensure t)
+  (use-package quelpa-use-package
+    :after quelpa
+    :ensure t)
+#+END_SRC
+
 Automatically update packages every 7 days, and delete old versions.
 
 #+BEGIN_SRC emacs-lisp
