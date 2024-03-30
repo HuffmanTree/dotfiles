@@ -162,6 +162,10 @@ Docker integration in Emacs to manage containers and images !!
     :bind ("C-c d" . docker))
 #+END_SRC
 
+| Key sequence | Function | Description     |
+|--------------+----------+-----------------|
+| ~C-c d~      | ~docker~ | Invoke ~docker~ |
+
 ** Code Versioning
 
 Magit is an Git client embedded in Emacs. It requires ~git~ installed.
