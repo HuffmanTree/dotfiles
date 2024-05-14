@@ -277,7 +277,9 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (indent-tabs-mode nil)
     :config
     (add-to-list 'eglot-server-programs
-                 '(solidity-mode . ("nomicfoundation-solidity-language-server" "--stdio"))))
+                 '(solidity-mode . ("nomicfoundation-solidity-language-server" "--stdio")))
+    (add-to-list 'eglot-server-programs
+                 '(cairo-mode . ("scarb" "cairo-language-server"))))
 
   (use-package treesit-auto
     :ensure t
@@ -303,6 +305,16 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :mode "\\.rs"
     :hook
     (rust-ts-mode . eglot-ensure))
+#+END_SRC
+
+*** Cairo
+
+#+BEGIN_SRC emacs-lisp
+  (define-derived-mode cairo-mode rust-ts-mode "Major mode for editing Cairo")
+  (use-package cairo-mode
+    :mode "\\.cairo"
+    :hook
+    (cairo-mode . eglot-ensure))
 #+END_SRC
 
 *** Solidity
