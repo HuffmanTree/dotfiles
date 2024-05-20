@@ -19,7 +19,8 @@ Native ~use-package~ is used as package manager.
 
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
-			   ("melpa" . "https://melpa.org/packages/")))
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
@@ -74,16 +75,28 @@ Default ~*Help*~ buffer is quite poor and gets enriched using ~helpful~.
     ("C-h k" . helpful-key))
 #+END_SRC
 
-** Shell
+** Terminal emulator
 
-Emacs comes with a shell emulator ~eshell~.
+I use ~eat~ as my terminal emulator inside Emacs, integrated with ~bash~:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package exec-path-from-shell
+  (use-package eat
     :ensure t
-    :config
-    (when (or (memq window-system '(mac ns x)) (daemonp))
-      (exec-path-from-shell-initialize)))
+    :bind
+    ("C-x p t" . eat-project))
+#+END_SRC
+
+Inside ~.bashrc~:
+
+#+BEGIN_SRC sh
+  # Enable colored prompt for 'eat'
+  if [ "$TERM" = eat-truecolor ]; then
+      color_prompt=yes;
+  fi
+
+  # Enable 'eat' shell integration
+  [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+      source "$EAT_SHELL_INTEGRATION_DIR/bash"
 #+END_SRC
 
 ** Key Completion
