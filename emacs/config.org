@@ -199,6 +199,20 @@ Magit is an Git client embedded in Emacs. It requires ~git~ installed.
 |--------------+----------+----------------|
 | ~C-x g~      | ~magit~  | Invoke ~magit~ |
 
+** Project management
+
+Native ~project.el~ is used as project manager.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package project
+    :custom
+    (project-switch-commands '((project-find-file    "Find file")
+                               (consult-ripgrep      "Find regexp")
+                               (project-find-dir     "Find directory")
+                               (magit-project-status "Magit")
+                               (eat-project          "Terminal"))))
+#+END_SRC
+
 ** Completion in buffer
 
 The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. In addition, ~orderless~ makes the completion much matching more fluid.
