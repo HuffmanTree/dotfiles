@@ -285,6 +285,13 @@ Enable source code blocks evalutation for some languages:
 Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eglot + Tree-Sitter, that are now both builtin in Emacs 29, along with the language syntax packages. Because Eglot is an LSP client, it requires LSP servers to be installed and running.
 
 #+BEGIN_SRC emacs-lisp
+  ;; make sure binaries are in the `PATH` env, so LSP servers get started successfully
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (when (or (memq window-system '(mac ns x)) (daemonp))
+      (exec-path-from-shell-initialize)))
+
   (use-package eglot
     :custom
     (indent-tabs-mode nil)
