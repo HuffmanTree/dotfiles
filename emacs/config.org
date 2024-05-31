@@ -191,7 +191,8 @@ Magit is an Git client embedded in Emacs. It requires ~git~ installed.
   (use-package magit
     :ensure t
     :bind
-    ("C-x g" . magit-status))
+    ("C-x g" . magit-status)
+    ("C-x p m" . magit-project-status))
 #+END_SRC
 
 | Key sequence | Function | Description    |
@@ -233,7 +234,8 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     ("C-x b"   . consult-buffer)
     ("M-g g"   . consult-goto-line)
     ("M-g M-g" . consult-goto-line)
-    ("C-x p b" . consult-project-buffer))
+    ("C-x p b" . consult-project-buffer)
+    ("C-x p g" . consult-ripgrep))
 
   (use-package orderless
     :ensure t
