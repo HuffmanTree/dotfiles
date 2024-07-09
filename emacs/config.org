@@ -483,6 +483,12 @@ Here are some configurations that do not fit in any particular sections.
   (add-hook 'read-only-mode-hook 'ht/highlight-if-read-only)
 #+END_SRC
 
+- Enable repeat mode
+
+#+BEGIN_SRC emacs-lisp
+  (repeat-mode 1)
+#+END_SRC
+
 - Enable multiple cursors
 
 #+BEGIN_SRC emacs-lisp
