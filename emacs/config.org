@@ -363,6 +363,21 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (solidity-mode . eglot-ensure))
 #+END_SRC
 
+*** Michelson
+
+#+BEGIN_SRC emacs-lisp
+  (use-package michelson-mode
+    :after quelpa-use-package
+    :ensure t
+    :quelpa (michelson-mode :fetcher url :url "https://gitlab.com/tezos/tezos/-/raw/master/emacs/michelson-mode.el")
+    :custom
+    (michelson-client-command "octez-client --mode mockup --protocol Psithaca")
+    :mode "\\.tz")
+#+END_SRC
+
+- typechecking is done with Ithaca, the last version of the protocol supporting annotation propagation. cf https://gitlab.com/tezos/tezos/-/issues/3699
+- depency ~deferred~ is not compatible with Emacs28 and above, and must be manually patched. cf https://github.com/kiwanami/emacs-deferred/pull/59
+
 *** Typescript
 
 #+BEGIN_SRC emacs-lisp
