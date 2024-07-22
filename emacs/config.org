@@ -331,7 +331,8 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (global-corfu-mode)
     :custom
     (corfu-cycle t)
-    (corfu-auto t))
+    (corfu-auto t)
+    (corfu-min-width 60))
 #+END_SRC
 
 *** Rust
