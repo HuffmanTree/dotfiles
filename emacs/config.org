@@ -267,6 +267,9 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     (visual-fill-column-width 200)
     (visual-fill-column-center-text t))
 
+  (use-package org-superstar
+    :ensure t)
+
   (use-package org-mode
     :after visual-fill-column
     :mode ("\\.org$")
@@ -284,7 +287,8 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     :hook
     (org-mode . variable-pitch-mode)          ;; use variable pitch fonts by default
     (org-mode . visual-line-fill-column-mode) ;; wrap lines within the document
-    (org-mode . org-indent-mode))
+    (org-mode . org-indent-mode)
+    (org-mode . org-superstar-mode))
 #+END_SRC
 
 Enable source code blocks evalutation for some languages:
