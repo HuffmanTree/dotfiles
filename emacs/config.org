@@ -312,12 +312,20 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (when (or (memq window-system '(mac ns x)) (daemonp))
       (exec-path-from-shell-initialize)))
 
+  (defun vue-eglot-init-options ()
+    (let ((tsdk-path (expand-file-name
+                      "lib"
+                      (string-trim-right (shell-command-to-string "npm list --global --parseable typescript | head -n1")))))
+      `(:typescript (:tsdk ,tsdk-path) :vue (:hybridMode :json-false))))
+
   (use-package eglot
     :custom
     (indent-tabs-mode nil)
     :config
     (add-to-list 'eglot-server-programs
                  '(solidity-mode . ("nomicfoundation-solidity-language-server" "--stdio")))
+    (add-to-list 'eglot-server-programs
+                 `(vue-ts-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))
     (add-to-list 'eglot-server-programs
                  '(cairo-mode . ("scarb" "cairo-language-server"))))
 
@@ -407,6 +415,20 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (js-ts-mode . eglot-ensure))
 #+END_SRC
 
+*** Vue
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vue-ts-mode
+    :after quelpa-use-package
+    :ensure t
+    :quelpa (vue-ts-mode :fetcher url :url "https://raw.githubusercontent.com/theschmocker/vue-ts-mode/main/vue-ts-mode.el")
+    :mode "\\.vue"
+    :config
+    (put 'vue-ts-mode 'eglot-language-id "vue")
+    :hook
+    (vue-ts-mode . eglot-ensure))
+#+END_SRC
+
 *** ESLint support
 
 #+BEGIN_SRC emacs-lisp
@@ -415,7 +437,7 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     :custom
     (eslint-rc-use-eslintignore nil)
     :hook
-    ((js-ts-mode . eslint-rc-mode) (typescript-ts-mode . eslint-rc-mode)))
+    ((js-ts-mode . eslint-rc-mode) (typescript-ts-mode . eslint-rc-mode) (vue-ts-mode . eslint-rc-mode)))
 #+END_SRC
 
 *** JSON
