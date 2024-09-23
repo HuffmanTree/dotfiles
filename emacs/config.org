@@ -315,6 +315,8 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
   (use-package eglot
     :custom
     (indent-tabs-mode nil)
+    (eglot-autoshutdown t)
+    (eglot-events-buffer-size 0)
     :config
     (add-to-list 'eglot-server-programs
                  '(solidity-mode . ("nomicfoundation-solidity-language-server" "--stdio")))
