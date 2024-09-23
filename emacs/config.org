@@ -125,7 +125,7 @@ Load my theme and icons to make them available for other packages.
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
     :ensure t
-    :config (modus-themes-select 'modus-operandi-tinted))
+    :config (modus-themes-select 'modus-vivendi-tinted))
 
   (use-package all-the-icons
     :ensure t
