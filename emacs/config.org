@@ -497,6 +497,32 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
     (c++-ts-mode . eglot-ensure))
 #+END_SRC
 
+** Assistant
+
+Dive into the AI era with ~gptel~ and an ~ollama~ server running locally!
+
+Setup of ~ollama~ with the ~llama3~ model:
+
+#+BEGIN_SRC sh
+  curl -fsSL https://ollama.com/install.sh | sh # install ollama
+  ollama pull llama3                            # pull "llama3" from ollama models library
+#+END_SRC
+
+Setup of ~gptel~:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gptel
+    :ensure t
+    :custom
+    (gptel-default-mode 'org-mode)
+    (gptel-post-response-functions 'gptel-end-of-response)
+    (gptel-model "llama3:latest")
+    (gptel-backend (gptel-make-ollama "Ollama"
+                     :host "localhost:11434"
+                     :stream t
+                     :models '("llama3:latest"))))
+#+END_SRC
+
 ** Miscellaneous
 
 Here are some configurations that do not fit in any particular sections.
