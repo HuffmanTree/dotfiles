@@ -402,33 +402,30 @@ Packages that I use to turn Emacs into a powerful IDE ! It mainly consists of Eg
 - typechecking is done with Ithaca, the last version of the protocol supporting annotation propagation. cf https://gitlab.com/tezos/tezos/-/issues/3699
 - depency ~deferred~ is not compatible with Emacs28 and above, and must be manually patched. cf https://github.com/kiwanami/emacs-deferred/pull/59
 
-*** Typescript
-
-#+BEGIN_SRC emacs-lisp
-  (use-package typescript-ts-mode
-    :mode "\\.ts"
-    :hook
-    (typescript-ts-mode . eglot-ensure))
-#+END_SRC
-
-*** Javascript
-
-#+BEGIN_SRC emacs-lisp
-  (use-package js-mode
-    :mode "\\.js"
-    :hook
-    (js-ts-mode . eglot-ensure))
-#+END_SRC
-
-*** ESLint support
+*** ESLint / Javascript / Typescript
 
 #+BEGIN_SRC emacs-lisp
   (use-package eslint-rc
     :ensure t
     :custom
-    (eslint-rc-use-eslintignore nil)
+    (eslint-rc-use-eslintignore nil))
+
+  (use-package flymake-eslint
+    :ensure t)
+
+  (use-package typescript-ts-mode
+    :mode "\\.ts"
     :hook
-    ((js-ts-mode . eslint-rc-mode) (typescript-ts-mode . eslint-rc-mode)))
+    (typescript-ts-mode . eglot-ensure)
+    (typescript-ts-mode . eslint-rc-mode)
+    (typescript-ts-mode . flymake-eslint-enable))
+
+  (use-package js-mode
+    :mode "\\.js"
+    :hook
+    (js-ts-mode . eglot-ensure)
+    (js-ts-mode . eslint-rc-mode)
+    (js-ts-mode . flymake-eslint-enable))
 #+END_SRC
 
 *** JSON
