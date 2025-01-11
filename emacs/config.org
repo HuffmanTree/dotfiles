@@ -127,12 +127,12 @@ Load my theme and icons to make them available for other packages.
     :ensure t
     :config (modus-themes-select 'modus-vivendi-tinted))
 
-  (use-package all-the-icons
+  (use-package nerd-icons
     :ensure t
     :if (or (display-graphic-p) (daemonp))
-    :init
-    (unless (member "all-the-icons" (font-family-list))
-      (all-the-icons-install-fonts t)))
+    :config
+    (unless (member nerd-icons-font-family (font-family-list))
+      (nerd-icons-install-fonts t)))
 
   (defun ht/set-faces (&optional frame)
     (set-face-attribute 'default nil :font "DejaVu Sans Mono-8")
@@ -158,11 +158,10 @@ Enhancements of the inbuilt Dired.
     :custom
     (dired-kill-when-opening-new-dired-buffer t))
 
-  (use-package all-the-icons-dired
+  (use-package nerd-icons-dired
     :ensure t
-    :after all-the-icons
-    :hook (dired-mode . all-the-icons-dired-mode)
-    :custom (all-the-icons-dired-monochrome nil))
+    :after nerd-icons
+    :hook (dired-mode . nerd-icons-dired-mode))
 #+END_SRC
 
 ** Container Manager
@@ -231,11 +230,11 @@ The completion layer is a combination of ~vertico~, ~marginalia~ and ~consult~. 
     :init
     (marginalia-mode))
 
-  (use-package all-the-icons-completion
-    :after (marginalia all-the-icons)
+  (use-package nerd-icons-completion
+    :after (marginalia nerd-icons)
     :ensure t
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :init (all-the-icons-completion-mode))
+    :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+    :init (nerd-icons-completion-mode))
 
   (use-package consult
     :ensure t
