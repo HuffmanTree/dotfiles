@@ -1,0 +1,7 @@
+[language-server.rust-analyzer.config]
+check.command = "clippy"
+
+[[language]]
+name = "typescript"
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server" ]
+auto-format = true

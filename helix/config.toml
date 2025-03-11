@@ -1,0 +1,31 @@
+[editor]
+mouse = false
+bufferline = "always"
+
+[editor.statusline]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "underline"
+
+[keys.normal]
+"left" = "no_op"
+"right" = "no_op"
+"up" = "no_op"
+"down" = "no_op"
+
+[keys.insert]
+"left" = "no_op"
+"right" = "no_op"
+"up" = "no_op"
+"down" = "no_op"
+
+[keys.select]
+"left" = "no_op"
+"right" = "no_op"
+"up" = "no_op"
+"down" = "no_op"
