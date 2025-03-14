@@ -12,6 +12,9 @@ normal = "block"
 insert = "bar"
 select = "underline"
 
+[editor.file-picker]
+hidden = false
+
 [keys.normal]
 "left" = "no_op"
 "right" = "no_op"
