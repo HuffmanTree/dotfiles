@@ -1,7 +1,45 @@
+# Rust
+
 [language-server.rust-analyzer.config]
 check.command = "clippy"
 
+# Typescript
+
 [[language]]
 name = "typescript"
+roots = [ "deno.json", "package.json" ]
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server", "deno-lsp" ]
+auto-format = true
+
+## Node
+
+[language-server.typescript-language-server]
+required-root-patterns = [ "package.json" ]
+
+[language-server.vscode-eslint-language-server]
+required-root-patterns = [ "package.json" ]
+
+## Deno
+
+[language-server.deno-lsp]
+command = "deno"
+args = [ "lsp" ]
+config = { deno = { enable = true } }
+required-root-patterns = [ "deno.json" ]
+
+# Javascript
+
+[[language]]
+name = "javascript"
 language-servers = [ "typescript-language-server", "vscode-eslint-language-server" ]
 auto-format = true
+
+# Solidity
+
+[language-server.solidity-language-server]
+command = "nomicfoundation-solidity-language-server"
+args = [ "--stdio" ]
+
+[[language]]
+name = "solidity"
+language-servers = [ { name = "solidity-language-server" } ]
